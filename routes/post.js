@@ -46,4 +46,32 @@ router.get('/mypost', middleware, (req, res) => {
     })
 })
 
+router.put('/like', middleware, (req, res) => {
+    Post.findByIdAndUpdate(req.body.postId, {
+        $push = {likes: req.user._id}
+    }, {
+        new: true
+    }).exec((err, response) =>{
+        if(err){
+            return res.status(422).json({error: err})
+        }else{
+            res.json(response)
+        }
+    })
+})
+
+router.put('/like', middleware, (req, res) => {
+    Post.findByIdAndUpdate(req.body.postId, {
+        $pull = {likes: req.user._id}
+    }, {
+        new: true
+    }).exec((err, response) =>{
+        if(err){
+            return res.status(422).json({error: err})
+        }else{
+            res.json(response)
+        }
+    })
+})
+
 module.exports = router
