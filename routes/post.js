@@ -48,7 +48,7 @@ router.get('/mypost', middleware, (req, res) => {
 
 router.put('/like', middleware, (req, res) => {
     Post.findByIdAndUpdate(req.body.postId, {
-        $push = {likes: req.user._id}
+        $push : {likes: req.user._id}
     }, {
         new: true
     }).exec((err, response) =>{
@@ -62,7 +62,7 @@ router.put('/like', middleware, (req, res) => {
 
 router.put('/like', middleware, (req, res) => {
     Post.findByIdAndUpdate(req.body.postId, {
-        $pull = {likes: req.user._id}
+        $pull : {likes: req.user._id}
     }, {
         new: true
     }).exec((err, response) =>{
