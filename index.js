@@ -13,6 +13,7 @@ app.use(bodyParser.json())
 
 app.use('/api/auth', routes.Auth)
 app.use('/api/post', routes.Post)
+app.use('/api/user', routes.User)
 
 app.listen(port, () => {
     console.log(`Server is running in port: ${port}`)
