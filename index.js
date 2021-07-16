@@ -3,13 +3,12 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT
 const db = require('./models/index')
-const bodyParser = require("body-parser")
 
 //routes
 
 const routes = require('./routes/index')
 
-app.use(bodyParser.json())
+app.use(express.json())
 
 app.use('/api/auth', routes.Auth)
 app.use('/api/post', routes.Post)
