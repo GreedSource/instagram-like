@@ -24,8 +24,9 @@ const Signin = () => {
             return
         }
         const status = await handleSignin(data);
-        console.log(status)
         if (!status.error){
+            localStorage.setItem('jwt', status.token);
+            localStorage.setItem('user', JSON.stringify(status.user));
             M.toast({html: 'Successfully signed in', classes: '#388e3c green darken-2'})
             history.push('/')
         }else{

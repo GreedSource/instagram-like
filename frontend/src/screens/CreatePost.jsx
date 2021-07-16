@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { insertData, fetchPhoto } from '../api/post'
 import M from 'materialize-css';
@@ -7,10 +7,27 @@ const CreatePost = () => {
     const history = useHistory();
     const [data, setData] = useState({ 
         title: '',
-        body: '',
-        image: '',
-    })
-    const [image, setImage] = useState('')
+        body: ''
+    });
+    const [image, setImage] = useState('');
+    const [url, setUrl] = useState('');
+    useEffect(() => {
+        if(url){
+            const formData = {
+                title: data.title, 
+                body: data.body, 
+                photo: url, 
+            }
+            const post = insertData(formData)
+            if (!post.error){
+                M.toast({html: 'Post successfully created', classes: '#388e3c green darken-2'});
+                history.push('/')
+            }else{
+                M.toast({html: post.error, classes: '#c62828 red darken-3'});
+            }
+        }
+        // eslint-disable-next-line
+    }, [url])
 
     const handleChange = (e) => {
         setData({
@@ -21,42 +38,24 @@ const CreatePost = () => {
 
     const handlePost = async (e) => {
         e.preventDefault();
-        await console.log(data)
-        
-        const photo = await handleUpload()
-        if (photo){
-            //setState({form: {...this.state.form, photo: photo}})
-            setData({
-                ...data, image: 'asdas'
-            });
-            const post = await insertData(data)
-            if (post){
-                M.toast({html: post.message, classes: '#388e3c green darken-2'});
-                history.push('/')
+        if(image && image.type.includes('image')){
+            const form = new FormData()
+            form.append('file', image)
+            form.append('upload_preset', 'insta-clone')
+            form.append('cloud_name', 'greedsource')
+            const fetchedPhoto = await fetchPhoto(form);
+            if (fetchedPhoto){
+                setUrl(fetchedPhoto.url)
             }else{
-                this.errorDialog()
+                M.toast({html: 'Something went wrong', classes: '#c62828 red darken-3'});
             }
         }else{
-            this.errorDialog()
-        }
-    }
-
-    const handleUpload = async () => {
-        const form = new FormData()
-        form.append('file', image)
-        form.append('upload_preset', 'insta-clone')
-        form.append('cloud_name', 'greedsource')
-        const fetchedPhoto = await fetchPhoto(form)
-        if (fetchedPhoto){
-            console.log(fetchedPhoto.url)
-            return fetchedPhoto.url
-        }else{
-            return false
+            M.toast({html: 'No image selected', classes: '#c62828 red darken-3'});
         }
     }
 
     return (
-        <div className="card input-filed"
+        <div className="card input-field"
             style={{
                 margin: '30px auto',
                 maxWidth: '500px',
@@ -65,8 +64,8 @@ const CreatePost = () => {
             }}
         >
             <form onSubmit={handlePost}>
-                <input type="text" placeholder="title" id='title' onChange={handleChange} />
-                <input type="text" placeholder="body" id="body" onChange={handleChange} />
+                <input type="text" placeholder="title" id='title' onChange={handleChange} required/>
+                <input type="text" placeholder="body" id="body" onChange={handleChange} required/>
                 <div className="file-field input-field">
                     <div className="btn #64b5f6 blue darken-1">
                         <span>Upload image</span>

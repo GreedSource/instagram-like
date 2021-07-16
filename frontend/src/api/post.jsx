@@ -48,17 +48,18 @@ import axios from 'axios'
   }
 
    async function insertData(form){ // ===============================================================================
-
-      try {
-         const {data} = await axios.post(`${url}createpost`, form, {
-             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-             }
-         })
-         return data
-      } catch (error) {
-         console.log(error)
-      }
+      const data = await axios.post(`${url}createpost`, form, {
+         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+         }
+      })
+      .then((response) => {
+         return response.data 
+      })
+      .catch((error) => {
+         return error.response.data
+      })
+      return data
    }
 
    async function fetchPhoto (api_info) {
