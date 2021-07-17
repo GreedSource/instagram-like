@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { UserContext } from '../routes/Routes';
-import { fetchData } from '../api/user';
+import { fetchData, unfollowUser, followUser } from '../api/user';
 import { useParams, useHistory } from 'react-router-dom';
 
 const UserProfile = () => {
     const [userProfile, setUserProfile] = useState(null);
+    const [showFollow, setShowFollow] = useState(true);
     const [posts, setPosts] = useState([]);
     const { id } = useParams();
     const history = useHistory();
@@ -23,6 +24,38 @@ const UserProfile = () => {
         handleData();
         // eslint-disable-next-line
     }, [id])
+
+    const handleFollowUser = async () => {
+        const response = await followUser(id);
+        if(!response.error){
+            dispatch({ type: 'UPDATE', payload: {following: response.following, followers: response.followers}});
+            localStorage.setItem('user', JSON.stringify(response))
+            setUserProfile((prevState) => {
+                return {
+                    ...prevState,
+                    followers: [...prevState.followers, response._id]
+                }
+            });
+            await setShowFollow(false);
+        }
+    }
+
+    const handleUnfollowUser = async () => {
+        const response = await unfollowUser(id);
+        if(!response.error){
+            dispatch({ type: 'UPDATE', payload: {following: response.following, followers: response.followers}});
+            localStorage.setItem('user', JSON.stringify(response))
+            setUserProfile((prevState) => {
+                const newFollowers = prevState.followers.filter(f => f !== response._id);
+                return {
+                    ...prevState,
+                    followers: newFollowers
+                }
+            });
+            await setShowFollow(true);
+        }
+    }
+
     return (
         <>
         {
@@ -37,9 +70,18 @@ const UserProfile = () => {
                             <h5>{userProfile ? userProfile.email : 'Loading...'}</h5>
                             <div style={{display: 'flex', justifyContent: 'space-between', width: "110%"}}>
                                 <h6>{ posts.length } posts</h6>
-                                <h6>100 followers</h6>
-                                <h6>150 following</h6>
+                                <h6>{userProfile ? userProfile.followers.length : 'Loading...'} followers</h6>
+                                <h6>{userProfile ? userProfile.following.length : 'Loading...'} following</h6>
                             </div>
+                            {
+                                showFollow 
+                                ?
+                                <input type="button" style={{margin: '10px'}} value="Follow user" onClick={handleFollowUser} className="btn waves-effect waves-light #64b5f6 blue darken-1" />
+                                :
+                                <input type="button" style={{margin: '10px'}} value="Unfollow user" onClick={handleUnfollowUser} className="btn waves-effect waves-light #64b5f6 blue darken-1" />
+                            }
+                            
+                            
                         </div>
                     </div>
                     <div className="gallery">
