@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../routes/Routes';
-import { fetchData } from '../api/post'
+import { fetchData, likePost, unlikePost } from '../api/post'
 
 const Home = () => {
     const [data, setData] = useState([]);
@@ -15,6 +15,32 @@ const Home = () => {
         loadData();
     }, []);
 
+    const handleLike = async (postId) => {
+        const response = await likePost(postId);
+        console.log(response._id)
+        const newData = await data.map(item => {
+            if(item._id === response._id){
+                return response
+            }else{
+                return item
+            }
+        })
+        setData(newData)
+    }
+
+    const handleUnlike = async (postId) => {
+        const response = await unlikePost(postId);
+        const newData = await data.map(item => {
+            if(item._id === response._id){
+                return response
+            }else{
+                return item
+            }
+        })
+        await setData(newData)
+    }
+
+
     return (
         <div className="home">
             {
@@ -26,9 +52,12 @@ const Home = () => {
                         </div>
                         <div className="card-content">
                             <i className="material-icons" style={{color:'red'}}> favorite </i>
-                            <i className="material-icons" > thumb_up </i>
-                            
-                            <h6>10 Likes</h6>
+                            {
+                                post.likes.includes(state._id)
+                                ? <i className="material-icons" onClick={() => handleUnlike(post._id)}> thumb_down </i>
+                                : <i className="material-icons" onClick={() => handleLike(post._id)}> thumb_up </i>
+                            }
+                            <h6>{post.likes.length} Likes</h6>
                             <h6>{post.title}</h6>
                             <p>{post.body}</p>
                             <h6><span><b>John Doe</b></span> Hello world</h6>

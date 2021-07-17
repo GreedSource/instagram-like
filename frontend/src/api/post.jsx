@@ -78,29 +78,33 @@ import axios from 'axios'
    }
 
    async function likePost(_id){
-      try {
-         const { data } = await axios.put(`${url}like`, {postId: _id}, {
-             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-             }
-         })
-         return data
-      } catch (error) {
-         console.log(error)
-      }
+      const data = await axios.put(`${url}like`, {postId: _id}, {
+         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+         }
+     })
+     .then((response) => {
+         return response.data
+     })
+     .catch((error) => {
+         return error.response.data
+     })
+     return data
    }
 
    async function unlikePost(_id){
-      try {
-         const { data } = await axios.put(`${url}unlike`, {postId: _id}, {
-             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-             }
-         })
-         return data
-      } catch (error) {
-         console.log(error)
-      }
+      const data = await axios.put(`${url}unlike`, {postId: _id}, {
+         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+         }
+     })
+     .then((response) => {
+         return response.data
+     })
+     .catch((error) => {
+         return error.response.data
+     })
+     return data
    }
 
    async function commentPost(text, postId) {
