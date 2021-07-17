@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom'
+import  { UserContext }  from '../routes/Routes';
 import { handleSignin } from '../api/auth';
 import M from 'materialize-css';
 
 
 const Signin = () => {
+    // eslint-disable-next-line
+    const { state, dispatch } = useContext(UserContext);
     const history = useHistory();
     const [data, setData] = useState({
         password: '',
@@ -27,6 +30,7 @@ const Signin = () => {
         if (!status.error){
             localStorage.setItem('jwt', status.token);
             localStorage.setItem('user', JSON.stringify(status.user));
+            dispatch({type: 'USER', payload: status.user});
             M.toast({html: 'Successfully signed in', classes: '#388e3c green darken-2'})
             history.push('/')
         }else{

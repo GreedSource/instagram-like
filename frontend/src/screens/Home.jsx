@@ -1,25 +1,42 @@
-import React from 'react';
-
+import React, { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { UserContext } from '../routes/Routes';
+import { fetchData } from '../api/post'
 
 const Home = () => {
+    const [data, setData] = useState([]);
+    // eslint-disable-next-line
+    const { state, dispatch } = useContext(UserContext);
+    useEffect(() => {
+        async function loadData() {
+            const response = await fetchData();
+            setData(response);
+        }
+        loadData();
+    }, []);
+
     return (
         <div className="home">
-            <div className="card home-card">
-                <h5 className="postedBy">Joel Garcia</h5>
-                <div className="card-image">
-                    <img src='https://images.unsplash.com/photo-1593373986890-ea50b4dda788?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1070&q=80' alt="profile" />
-                </div>
-                <div className="card-content">
-                    <i className="material-icons" style={{color:'red'}}> favorite </i>
-                    <i className="material-icons" > thumb_up </i>
-                    
-                    <h6>10 Likes</h6>
-                    <h6>Photo</h6>
-                    <p>My photo</p>
-                    <h6><span><b>John Doe</b></span> Hello world</h6>
-                    <input type="text" placeholder="Make a comment" name="comment" />
-                </div>
-            </div>
+            {
+                data.map((post, index) => (
+                    <div className="card home-card" key={post._id}>
+                        <h5 className="postedBy"><Link to={post.postedBy._id !== state._id ? `/profile/${post.postedBy._id}` : '/profile'}>{post.postedBy.name}</Link>{state._id === post.postedBy._id ? <i className="material-icons" style={{float: 'right'}}>delete</i> : '' }</h5>
+                        <div className="card-image">
+                            <img src={post.photo} alt="profile" />
+                        </div>
+                        <div className="card-content">
+                            <i className="material-icons" style={{color:'red'}}> favorite </i>
+                            <i className="material-icons" > thumb_up </i>
+                            
+                            <h6>10 Likes</h6>
+                            <h6>{post.title}</h6>
+                            <p>{post.body}</p>
+                            <h6><span><b>John Doe</b></span> Hello world</h6>
+                            <input type="text" placeholder="Make a comment" name="comment" />
+                        </div>
+                    </div>
+                ))
+            }
         </div>
     )
 }

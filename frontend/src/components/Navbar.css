@@ -6,3 +6,7 @@ a{
     font-family: 'Grand Hotel', cursive;
     margin-left: 1rem;
 }
+
+.nav-wrapper{
+    padding-right: 1rem;
+}

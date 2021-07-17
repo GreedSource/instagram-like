@@ -28,7 +28,7 @@ const CreatePost = () => {
         }
         // eslint-disable-next-line
     }, [url])
-
+    
     const handleChange = (e) => {
         setData({
             ...data,

@@ -20,31 +20,32 @@ import axios from 'axios'
 // ####################################################################################################################################
 
    async function fetchData(){
-       try{
-           const {data} = await axios.get(`${url}`, {
-               headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-               }
-           })
-           return data.posts
-       }
-       catch(err){
-           console.log(err)
-       }
+      const data = await axios.get(`${url}`, {
+         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+         }
+      })
+      .then((response) => {
+         return response.data.posts
+      })
+      .catch((error) => {
+         return error.response.data
+      })
+      return data
    }
 
    async function fetchPosts(){
-      try{
-          const {data} = await axios.get(`${url}mypost`, {
-              headers: {
-                   'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-              }
-          })
-          return data.posts
-      }
-      catch(err){
-          console.log(err)
-      }
+      const data = await axios.get(`${url}mypost`, {
+         headers: {
+              'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+         }
+      }).then((response) => {
+         return response.data.posts
+      })
+      .catch((error) => {
+         return error.response.data
+      })
+      return data
   }
 
    async function insertData(form){ // ===============================================================================
