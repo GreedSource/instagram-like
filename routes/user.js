@@ -23,4 +23,50 @@ router.get('/:id', middleware, (req, res) => {
     })
 })
 
+router.put('follow/:id', middleware, (req, res) => {
+    User.findByIdAndUpdate(req.body.followId, {
+        $push: { followers: req.user._id }
+    },{
+        new: true
+    }, (err, result) => {
+        if (err) {
+            return res.status(422).json({error: err})
+        }
+        User.findByIdAndUpdate(req.user._id, {
+            $push: { following: req.body.followId }
+        }, {
+            new: true
+        })
+        .then(result => {
+            res.json(result)
+        })
+        .catch(err => {
+            return res.status(422).json({error: err})
+        })
+    })
+})
+
+router.put('unfollow/:id', middleware, (req, res) => {
+    User.findByIdAndUpdate(req.body.unfollowId, {
+        $pull: { followers: req.user._id }
+    },{
+        new: true
+    }, (err, result) => {
+        if (err) {
+            return res.status(422).json({error: err})
+        }
+        User.findByIdAndUpdate(req.user._id, {
+            $pull: { following: req.body.unfollowId }
+        }, {
+            new: true
+        })
+        .then(result => {
+            res.json(result)
+        })
+        .catch(err => {
+            return res.status(422).json({error: err})
+        })
+    })
+})
+
 module.exports = router
