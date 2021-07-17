@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useEffect, useContext } from 'react';
 import Navbar from '../components/Navbar'
 import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom'
-import { Home, Signin, Signup, Profile, CreatePost } from '../screens/Index'
+import { Home, Signin, Signup, Profile, CreatePost, UserProfile } from '../screens/Index'
 import { Error404 } from '../error/Index';
 import { reducer, initialState } from '../reducer/userReducer'
 import './Routes.css'
@@ -25,6 +25,7 @@ const Routing = () => {
         <Switch>
             <Route exact component={Home} path={'/'} />
             <Route exact component={Profile} path={'/profile'} />
+            <Route component={UserProfile} path={'/profile/:id'} />
             <Route exact component={Signin} path={'/signin'} />
             <Route exact component={Signup} path={'/signup'} />
             <Route exact component={CreatePost} path={'/createpost'} />

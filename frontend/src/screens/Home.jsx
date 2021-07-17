@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { UserContext } from '../routes/Routes';
-import { fetchData, likePost, unlikePost } from '../api/post'
+import { fetchData, likePost, unlikePost, commentPost, deletePost } from '../api/post'
 
 const Home = () => {
     const [data, setData] = useState([]);
@@ -17,7 +17,6 @@ const Home = () => {
 
     const handleLike = async (postId) => {
         const response = await likePost(postId);
-        console.log(response._id)
         const newData = await data.map(item => {
             if(item._id === response._id){
                 return response
@@ -25,7 +24,7 @@ const Home = () => {
                 return item
             }
         })
-        setData(newData)
+        await setData(newData)
     }
 
     const handleUnlike = async (postId) => {
@@ -40,17 +39,47 @@ const Home = () => {
         await setData(newData)
     }
 
+    const handleComment = async (postId, text) => {
+        const response = await commentPost(postId, text);
+        const newData = await data.map(item => {
+            if(item._id === response._id){
+                return response
+            }else{
+                return item
+            }
+        })
+        await setData(newData)
+    }
+
+    const handleDelete = async (postId) => {
+        const response = await deletePost(postId);
+        const newData = data.filter(item => {
+            return item._id !== response._id
+        })
+        await setData(newData)
+    }
 
     return (
         <div className="home">
             {
                 data.map((post, index) => (
                     <div className="card home-card" key={post._id}>
-                        <h5 className="postedBy"><Link to={post.postedBy._id !== state._id ? `/profile/${post.postedBy._id}` : '/profile'}>{post.postedBy.name}</Link>{state._id === post.postedBy._id ? <i className="material-icons" style={{float: 'right'}}>delete</i> : '' }</h5>
+                        <h5 className="postedBy">
+                            <Link to={post.postedBy._id !== state._id ? `/profile/${post.postedBy._id}` : '/profile'}>
+                                {post.postedBy.name}
+                            </Link>
+                            {
+                                state._id === post.postedBy._id 
+                                ? <i className="material-icons" style={{float: 'right'}} onClick={
+                                    () => handleDelete(post._id)
+                                }>delete</i> 
+                                : '' 
+                            }
+                        </h5>
                         <div className="card-image">
                             <img src={post.photo} alt="profile" />
                         </div>
-                        <div className="card-content">
+                        <div className="card-content input-field">
                             <i className="material-icons" style={{color:'red'}}> favorite </i>
                             {
                                 post.likes.includes(state._id)
@@ -60,8 +89,23 @@ const Home = () => {
                             <h6>{post.likes.length} Likes</h6>
                             <h6>{post.title}</h6>
                             <p>{post.body}</p>
-                            <h6><span><b>John Doe</b></span> Hello world</h6>
-                            <input type="text" placeholder="Make a comment" name="comment" />
+                            {
+                                post.comments.map(comment => {
+                                    return (
+                                        <h6 key={comment._id}><span><b>{comment.postedBy.name}</b></span> {comment.text}</h6>
+                                    )
+                                })
+                            }
+                            
+                            <form onSubmit={
+                                (e) => {
+                                    e.preventDefault();
+                                    handleComment(post._id, e.target.comment.value)
+                                    e.target.reset();
+                                }
+                            }>
+                                <input type="text" placeholder="Make a comment" id='comment' />
+                            </form>
                         </div>
                     </div>
                 ))

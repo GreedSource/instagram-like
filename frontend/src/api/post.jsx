@@ -64,17 +64,18 @@ import axios from 'axios'
    }
 
    async function fetchPhoto (api_info) {
-       try {
-           const { data } = await axios.post('https://api.cloudinary.com/v1_1/greedsource/image/upload', api_info, {
-               headers: { 
-                   'Content-Type': 'multipart/form-data',
-                }
-           })
-           return data
-       }
-       catch (error) {
-           console.log(error)
-       }
+      const data = await axios.post('https://api.cloudinary.com/v1_1/greedsource/image/upload', api_info, {
+         headers: { 
+            'Content-Type': 'multipart/form-data',
+         }
+      })
+      .then((response) => {
+         return response.data
+      })
+      .catch((error) => {
+         return error.response.data
+      })
+      return data
    }
 
    async function likePost(_id){
@@ -107,30 +108,34 @@ import axios from 'axios'
      return data
    }
 
-   async function commentPost(text, postId) {
-      try {
-         const { data } = await axios.put(`${url}comment`, { text, postId }, {
-             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-             }
-         })
-         return data
-      } catch (error) {
-         console.log(error)
-      }
+   async function commentPost(postId, text) {
+      const data = await axios.put(`${url}comment`, { postId, text }, {
+         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+         }
+      })
+      .then((response) => {
+         return response.data
+      })
+      .catch((error) => {
+         return error.response.data
+      })
+      return data
    }
 
    async function deletePost(postId) {
-      try {
-         const { data } = await axios.delete(`${url}deletepost/${postId}`, {
-             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-             }
-         })
-         return data
-      } catch (error) {
-         console.log(error)
-      }
+      const data = await axios.delete(`${url}deletepost/${postId}`, {
+         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+         }
+      })
+      .then((response) => {
+         return response.data
+      })
+      .catch((error) => {
+         return error.response.data
+      })
+      return data
    }
 
 // ####################################################################################################################################
