@@ -23,7 +23,7 @@ router.get('/:id', middleware, (req, res) => {
     })
 })
 
-router.put('follow/:id', middleware, (req, res) => {
+router.put('follow', middleware, (req, res) => {
     User.findByIdAndUpdate(req.body.followId, {
         $push: { followers: req.user._id }
     },{
@@ -46,7 +46,7 @@ router.put('follow/:id', middleware, (req, res) => {
     })
 })
 
-router.put('unfollow/:id', middleware, (req, res) => {
+router.put('unfollow', middleware, (req, res) => {
     User.findByIdAndUpdate(req.body.unfollowId, {
         $pull: { followers: req.user._id }
     },{
