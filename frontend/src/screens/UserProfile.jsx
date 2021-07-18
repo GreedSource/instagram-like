@@ -5,12 +5,11 @@ import { useParams, useHistory } from 'react-router-dom';
 
 const UserProfile = () => {
     const [userProfile, setUserProfile] = useState(null);
-    const [showFollow, setShowFollow] = useState(true);
     const [posts, setPosts] = useState([]);
     const { id } = useParams();
     const history = useHistory();
-    // eslint-disable-next-line
     const { state, dispatch } = useContext(UserContext); 
+    const [showFollow, setShowFollow] = useState(state ? !state.following.includes(id) : true);
     useEffect(() => {
         const handleData = async () => {
             const response = await fetchData(id);
@@ -76,9 +75,9 @@ const UserProfile = () => {
                             {
                                 showFollow 
                                 ?
-                                <input type="button" style={{margin: '10px'}} value="Follow user" onClick={handleFollowUser} className="btn waves-effect waves-light #64b5f6 blue darken-1" />
+                                <input type="button" style={{margin: '10px'}} value="Follow" onClick={handleFollowUser} className="btn waves-effect waves-light #64b5f6 blue darken-1" />
                                 :
-                                <input type="button" style={{margin: '10px'}} value="Unfollow user" onClick={handleUnfollowUser} className="btn waves-effect waves-light #64b5f6 blue darken-1" />
+                                <input type="button" style={{margin: '10px'}} value="Unfollow" onClick={handleUnfollowUser} className="btn waves-effect waves-light #64b5f6 blue darken-1" />
                             }
                             
                             

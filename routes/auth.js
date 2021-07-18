@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 const User = mongoose.model('user')
 
 router.post('/signup', (req, res) => {
-    const {name, email, password} = req.body
+    const {name, email, password, photo} = req.body
     if(!email || !password || !name){
         return res.status(422).json({error: 'please add all the fields'})
     }
@@ -20,7 +20,8 @@ router.post('/signup', (req, res) => {
             const user = new User({
                 email, 
                 password: hashedPassword, 
-                name
+                name,
+                photo
             })
             user.save()
             .then(user => {
@@ -50,8 +51,8 @@ router.post('/signin', (req, res) =>{
         .then(doMatch => {
             if (doMatch) {
                 const token = jwt.sign({_id: savedUser._id}, process.env.SECRET)
-                const {_id, name, email, following, followers } = savedUser 
-                res.json({token, user: {_id, name, email, following, followers}})
+                const {_id, name, email, following, followers, photo } = savedUser 
+                res.json({token, user: {_id, name, email, following, followers, photo}})
             }else{
                 return res.status(422).json({error: 'invalid email or password'})
             }

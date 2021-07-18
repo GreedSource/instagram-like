@@ -46,3 +46,11 @@ h2{
 .postedBy {
     padding: .6rem;
 }
+
+.material-icons:hover {
+    cursor: pointer;
+}
+
+.material-icons {
+    margin-right: .5rem;
+}
