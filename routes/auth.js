@@ -2,8 +2,17 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 const User = mongoose.model('user')
+const nodemailer = require('nodemailer')
+const sendgrid = require('nodemailer-sendgrid-transport')
+
+const transporter = nodemailer.createTransport(sendgrid({
+    auth: {
+        api_key: process.env.SENDGRID_API_KEY
+    }
+}))
 
 router.post('/signup', (req, res) => {
     const {name, email, password, photo} = req.body
@@ -25,6 +34,12 @@ router.post('/signup', (req, res) => {
             })
             user.save()
             .then(user => {
+                transporter.sendMail({
+                    to: `${user.name} <${user.email}>`,
+                    from: 'no-reply <joelgarciia95@gmail.com>',
+                    subject: 'Signup success',
+                    html: `<h1>Welcome to MERN Instagram</h1>`
+                })
                 res.json({message: 'saved successfully'})
             })
             .catch(err => {
@@ -62,6 +77,36 @@ router.post('/signin', (req, res) =>{
     })
     .catch(err => {
         console.log(err)
+    })
+})
+
+router.post('/reset-password', (req, res) => {
+    crypto.randomBytes(32, (err, buf) => {
+        if(err){
+            return res.status(500).json({error: 'could not generate token'})
+        }
+        const token = buf.toString('hex')
+        User.findOne({email: req.body.email})
+        .then(user => {
+            if(!user){
+                return res.status(422).json({error: 'user does not exist'})
+            }
+            user.password = crypto.randomBytes(10).toString('hex')
+            user.save()
+            .then(user => {
+                transporter.sendMail({
+                    to: `${user.name} <${user.email}>`,
+                    from: '',
+                    subject: 'Reset password',
+                    html: `<h1>Reset password</h1>
+                        <p>Click <a href="http://localhost:3000/reset-password/${token}">here</a> to reset your password</p>`
+                })
+                res.json({message: 'password reset email sent'})
+            })
+            .catch(err => {
+                console.log(err)
+            }) 
+        })
     })
 })
 

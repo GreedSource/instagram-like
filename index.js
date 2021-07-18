@@ -14,7 +14,7 @@ app.use('/api/auth', routes.Auth)
 app.use('/api/post', routes.Post)
 app.use('/api/user', routes.User)
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'production') {
     app.use(express.static('frontend/build'))
     const path = require('path')
     app.get('*', (req, res) => {
