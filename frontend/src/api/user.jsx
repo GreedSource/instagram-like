@@ -9,7 +9,8 @@ const url = '/api/user/'
 export {
     fetchData,
     unfollowUser,
-    followUser
+    followUser, 
+    updateUser
 }
 
 // ####################################################################################################################################
@@ -46,6 +47,21 @@ async function followUser(followId) {
 
 async function unfollowUser(unfollowId) {
     const data = await axios.put(`${url}unfollow`, { unfollowId } ,{
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        }
+    })
+    .then((response) => {
+        return response.data
+    })
+    .catch((error) => {
+        return error.response.data;
+    })
+    return data
+}
+
+async function updateUser(formData){
+    const data = await axios.put(`${url}update`, formData, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('jwt')}`
         }

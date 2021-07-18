@@ -71,4 +71,18 @@ router.put('/unfollow', middleware, (req, res) => {
     })
 })
 
+router.put('/update', middleware, (req, res) => {
+    User.findByIdAndUpdate(req.decode._id, {
+        $set: { photo: req.body.photo }
+    }, {
+        new: true
+    },
+    (err, result) => {
+        if (err) {
+            return res.status(422).json({error: err})
+        }
+        res.json(result)
+    })
+})
+
 module.exports = router

@@ -62,7 +62,7 @@ const UserProfile = () => {
                 <div style={{maxWidth: "975px", margin: "0px auto"}}>
                     <div style={{ display: 'flex', justifyContent: 'space-around', margin: '18px 0px', borderBottom: "1px solid grey"}}>
                         <div>
-                            <img style={{width:"160px", height: "160px", borderRadius: "80px"}} src="https://res.cloudinary.com/greedsource/image/upload/v1626308853/profile-1_esjhzg.jpg" alt="profile" />
+                            <img style={{width:"160px", height: "160px", borderRadius: "80px"}} src={userProfile ? userProfile.photo : 'Loading...'} alt="profile" />
                         </div>
                         <div>
                             <h4>{userProfile ? userProfile.name : 'Loading...'}</h4>
