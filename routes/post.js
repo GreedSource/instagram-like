@@ -16,6 +16,18 @@ router.get('/', middleware, (req, res) => {
     })
 })
 
+router.get('/getsubpost', middleware, (req, res) => {
+    Post.find({postedBy: {$in: req.decode.following}})
+    .populate('postedBy', '_id name')
+    .populate('comments.postedBy', '_id name')
+    .then(posts => {
+        res.json({posts})
+    })
+    .catch(err => {
+        console.log(err)
+    })
+})
+
 router.post('/createpost', middleware, (req, res) => {
     const { title, body, photo } = req.body
     if (!title || !body || !photo){
@@ -52,7 +64,9 @@ router.put('/like', middleware, (req, res) => {
         $push : {likes: req.decode._id}
     }, {
         new: true
-    }).exec((err, response) =>{
+    })
+    .populate('postedBy', '_id name')
+    .exec((err, response) =>{
         if(err){
             return res.status(422).json({error: err})
         }else{
@@ -66,7 +80,9 @@ router.put('/unlike', middleware, (req, res) => {
         $pull : {likes: req.decode._id}
     }, {
         new: true
-    }).exec((err, response) =>{
+    })
+    .populate('postedBy', '_id name')
+    .exec((err, response) =>{
         if(err){
             return res.status(422).json({error: err})
         }else{

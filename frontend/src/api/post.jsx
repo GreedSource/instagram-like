@@ -14,7 +14,8 @@ import axios from 'axios'
       unlikePost,
       commentPost,
       deletePost,
-      fetchPosts
+      fetchPosts,
+      fetchSubscribedPosts
    }
 
 // ####################################################################################################################################
@@ -37,7 +38,7 @@ import axios from 'axios'
    async function fetchPosts(){
       const data = await axios.get(`${url}mypost`, {
          headers: {
-              'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
          }
       }).then((response) => {
          return response.data.posts
@@ -46,7 +47,21 @@ import axios from 'axios'
          return error.response.data
       })
       return data
-  }
+   }
+
+   async function fetchSubscribedPosts(){
+      const data = await axios.get(`${url}getsubpost`, {
+         headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+         }
+      }).then((response) => {
+         return response.data.posts
+      })
+      .catch((error) => {
+         return error.response.data
+      })
+      return data
+   }
 
    async function insertData(form){ // ===============================================================================
       const data = await axios.post(`${url}createpost`, form, {

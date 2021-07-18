@@ -10,7 +10,7 @@ mongoose.connection.on('connected', () => {
 })
 
 mongoose.connection.on('error', (err) => {
-    consoel.log('err connecting', err)
+    console.log('err connecting', err)
 })
 
 module.exports.User = require("./user")

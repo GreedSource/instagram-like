@@ -12,7 +12,8 @@ const Navbar = () => {
             return [
                 <li key={'1'}><Link to='/profile'>Profile</Link></li>,
                 <li key={'2'}><Link to='/createpost'>Create post</Link></li>,
-                <li key={'3'}>
+                <li key={'3'}><Link to='/myfollows'>My follows</Link></li>,
+                <li key={'4'}>
                     <input type="button" onClick={() => { localStorage.clear(); dispatch({type:'CLEAR'}); history.push('/signin') }} value="Logout" className="btn #c62828 red darken-3" />
                 </li>
             ]

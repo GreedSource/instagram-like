@@ -1,19 +1,21 @@
 const jwt = require("jsonwebtoken")
+const mongoose = require('mongoose')
+const User = mongoose.model('user')
 
 module.exports = (req, res, next) => {
-    if(req.headers.authorization){
-        const token = req.headers.authorization.split(" ")[1]
-        jwt.verify(token, process.env.SECRET, (err, decode)=>{
-            if(err){
-                next(Error("Failed to authenticate token"))
-            }else{
-                req.decode = decode
-                next()
-            }
-        })
-
-    }else{
-        //next(Error("No token provider"))
+    const { authorization } = req.headers
+    if(!authorization){
         return res.status(401).json({error: 'No token provider'})
     }
+    const token = authorization.replace('Bearer ', '')
+    jwt.verify(token, process.env.SECRET, (err, payload) => {
+        if(err){
+            return res.status(401).json({error: 'Failed to authenticate token'})
+        }
+        const { _id } = payload;
+        User.findById(_id).then(user => {
+            req.decode = user
+            next()
+        })
+    })
 }

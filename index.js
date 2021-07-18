@@ -2,7 +2,7 @@ require("dotenv").config()
 const express = require('express')
 const app = express()
 const port = process.env.PORT
-const db = require('./models/index')
+require('./models/index')
 
 //routes
 
@@ -15,5 +15,5 @@ app.use('/api/post', routes.Post)
 app.use('/api/user', routes.User)
 
 app.listen(port, () => {
-    console.log(`Server is running in port: ${port}`)
+    console.log(`Server is running in port: http://localhost:${port}`)
 })
