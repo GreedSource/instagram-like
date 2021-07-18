@@ -26,10 +26,10 @@ const Profile = () => {
                 form.append('cloud_name', 'greedsource')
                 const fetchedPhoto = await fetchPhoto(form);
                 if (fetchedPhoto){
-                    const response = await updateUser({photo: fetchedPhoto.url});
+                    const response = await updateUser({photo: fetchedPhoto.secure_url});
                     if(!response.error) {
-                        await localStorage.setItem('user', JSON.stringify({...state, photo: fetchedPhoto.url}))
-                        await dispatch({type: 'UPDATE_PHOTO', payload: { photo: fetchedPhoto.url }})
+                        await localStorage.setItem('user', JSON.stringify({...state, photo: fetchedPhoto.secure_url}))
+                        await dispatch({type: 'UPDATE_PHOTO', payload: { photo: fetchedPhoto.secure_url }})
                     }else{
                         M.toast({html: 'Something went wrong', classes: '#c62828 red darken-3'});
                     }

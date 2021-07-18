@@ -34,7 +34,7 @@ const Signup = () => {
         form.append('cloud_name', 'greedsource')
         const fetchedPhoto = await fetchPhoto(form);
         if (fetchedPhoto){
-            setUrl(fetchedPhoto.url)
+            setUrl(fetchedPhoto.secure_url)
         }else{
             M.toast({html: 'Something went wrong', classes: '#c62828 red darken-3'});
         }
