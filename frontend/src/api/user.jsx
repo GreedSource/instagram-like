@@ -10,7 +10,8 @@ export {
     fetchData,
     unfollowUser,
     followUser, 
-    updateUser
+    updateUser,
+    fetchUsers
 }
 
 // ####################################################################################################################################
@@ -62,6 +63,21 @@ async function unfollowUser(unfollowId) {
 
 async function updateUser(formData){
     const data = await axios.put(`${url}update`, formData, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        }
+    })
+    .then((response) => {
+        return response.data
+    })
+    .catch((error) => {
+        return error.response.data;
+    })
+    return data
+}
+
+async function fetchUsers(formData){
+    const data = await axios.post(`${url}search-users`, formData, {
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('jwt')}`
         }

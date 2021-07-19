@@ -24,6 +24,13 @@ const UserProfile = () => {
         // eslint-disable-next-line
     }, [id])
 
+    useEffect(() => {
+        if (state && id === state._id) {
+            history.push('/profile');
+        }
+        //eslint-disable-next-line
+    }, [state]);
+
     const handleFollowUser = async () => {
         const response = await followUser(id);
         if(!response.error){

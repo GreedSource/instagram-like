@@ -85,4 +85,16 @@ router.put('/update', middleware, (req, res) => {
     })
 })
 
+router.post('/search-users', middleware , (req, res) => {
+    const usePattern = new RegExp(`^${req.body.keywords}`)
+    User.find({email:{$regex: usePattern}})
+    .select('_id name photo email')
+    .then(users => {
+        res.json({users})
+    })
+    .catch(err => {
+        return res.status(422).json({error: err})
+    })
+})
+
 module.exports = router
