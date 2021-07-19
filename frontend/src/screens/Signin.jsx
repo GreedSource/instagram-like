@@ -44,7 +44,7 @@ const Signin = () => {
                 <form onSubmit={handlePost}>
                     <input type="text" placeholder="email" id="email" autoComplete="email" onChange={handleChange} />
                     <input type="password" placeholder="password" id="password" autoComplete="current-password" onChange={handleChange} />
-                    <input type="submit" value="Login" className="btn waves-effect waves-light #64b5f6 blue darken-1" />
+                    <button type="submit" className="btn waves-effect waves-light #64b5f6 blue darken-1" >Login</button>
                 </form>
                 <h5>
                     <Link to="/signup">Don't have an account?</Link>

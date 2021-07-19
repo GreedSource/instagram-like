@@ -75,9 +75,9 @@ const UserProfile = () => {
                             {
                                 showFollow 
                                 ?
-                                <input type="button" style={{margin: '10px'}} value="Follow" onClick={handleFollowUser} className="btn waves-effect waves-light #64b5f6 blue darken-1" />
+                                <button type="button" style={{margin: '10px'}} onClick={handleFollowUser} className="btn waves-effect waves-light #64b5f6 blue darken-1" >Follow</button>
                                 :
-                                <input type="button" style={{margin: '10px'}} value="Unfollow" onClick={handleUnfollowUser} className="btn waves-effect waves-light #64b5f6 blue darken-1" />
+                                <button type="button" style={{margin: '10px'}} onClick={handleUnfollowUser} className="btn waves-effect waves-light #64b5f6 blue darken-1">Unfollow</button>
                             }
                             
                             

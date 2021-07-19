@@ -87,7 +87,7 @@ const Signup = () => {
                             <input className="file-path validate" type="text" />
                         </div>
                     </div>
-                    <input type="submit" value="Signup" className="btn waves-effect waves-light #64b5f6 blue darken-1" />
+                    <button type="submit" className="btn waves-effect waves-light #64b5f6 blue darken-1">Signup</button>
                 </form>
                 <h5>
                     <Link to="/signin">Already have an account?</Link>
