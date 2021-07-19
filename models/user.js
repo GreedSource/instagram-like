@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema({
     },
     photo: {
         type: String,
-        default: 'https://res.cloudinary.com/greedsource/image/upload/v1610245677/bpnospb1wlvwlf6xqlak.jpg'
+        default: 'https://res.cloudinary.com/greedsource/image/upload/v1626656345/old-man_athuoc.jpg'
     },
     followers: [{
         type: ObjectId,
@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema({
         type: ObjectId,
         ref: 'user'
     }],
+    resetToken: String,
+    expireToken: Date,
 })
 
 module.exports = mongoose.model('user', userSchema)

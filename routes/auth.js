@@ -91,22 +91,47 @@ router.post('/reset-password', (req, res) => {
             if(!user){
                 return res.status(422).json({error: 'user does not exist'})
             }
-            user.password = crypto.randomBytes(10).toString('hex')
+            user.resetToken = token,
+            user.expireToken = Date.now() + 3600000
             user.save()
-            .then(user => {
+            .then((response) => {
                 transporter.sendMail({
                     to: `${user.name} <${user.email}>`,
-                    from: '',
-                    subject: 'Reset password',
-                    html: `<h1>Reset password</h1>
-                        <p>Click <a href="http://localhost:3000/reset-password/${token}">here</a> to reset your password</p>`
+                    from: 'no-reply <joelgarciia95@gmail.com>',
+                    subject: 'Password reset',
+                    html: `<h1>Password reset</h1>
+                    <p>Click the following link to reset your password</p>
+                    <p><a href="http://localhost:3000/reset-password/${token}">Reset Password</a></p>`
                 })
                 res.json({message: 'password reset email sent'})
             })
+        })
+    })
+})
+
+router.put('/reset-password', (req, res) => {
+    const { password , token } = req.body
+    User.findOne({resetToken: token, expireToken: {$gt: Date.now()}})
+    .then(user => {
+        if(!user){
+            return res.status(422).json({error: 'token expired'})
+        }
+        bcrypt.hash(password, 10)
+        .then(hashedPassword => {
+            user.password = hashedPassword
+            user.resetToken = undefined
+            user.expireToken = undefined
+            user.save()
+            .then(() => {
+                res.json({message: 'password reset successfully'})
+            })
             .catch(err => {
                 console.log(err)
-            }) 
+            })
         })
+    })
+    .catch(err => {
+        console.log(err)
     })
 })
 

@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useEffect, useContext } from 'react';
 import Navbar from '../components/Navbar'
 import { BrowserRouter, Route, Switch, useHistory } from 'react-router-dom'
-import { Home, Signin, Signup, Profile, CreatePost, UserProfile, SubscribedUserPosts } from '../screens/Index'
+import { Home, Signin, Signup, Profile, CreatePost, UserProfile, SubscribedUserPosts, ResetPassword, NewPassword } from '../screens/Index'
 import { Error404 } from '../error/Index';
 import { reducer, initialState } from '../reducer/userReducer'
 import './Routes.css'
@@ -15,8 +15,8 @@ const Routing = () => {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
             dispatch({ type: 'USER', payload: user });
-            //history.push('/')
         }else{
+            if(!history.location.pathname.match(/\/reset/))
             history.push('/signin')
         }
         //eslint-disable-next-line
@@ -30,6 +30,8 @@ const Routing = () => {
             <Route exact component={Signin} path={'/signin'} />
             <Route exact component={Signup} path={'/signup'} />
             <Route exact component={CreatePost} path={'/createpost'} />
+            <Route exact component={ResetPassword} path={'/reset-password'} />
+            <Route exact component={NewPassword} path={'/reset-password/:token'} />
             <Route component={Error404} />
         </Switch>
     )

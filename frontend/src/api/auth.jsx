@@ -8,7 +8,9 @@ import axios from 'axios'
 // ####################################################################################################################################
    export {
       handleSignup,
-      handleSignin
+      handleSignin,
+      handleResetPassword,
+      handleNewPassword
    }
 
 // ####################################################################################################################################
@@ -26,6 +28,28 @@ import axios from 'axios'
 
    async function handleSignin(form) {
       const data = await axios.post(`${url}signin`, form)
+      .then((response) => {
+         return response.data
+      })
+      .catch((error) => {
+         return error.response.data
+      })
+      return data;
+   }
+
+   async function handleResetPassword(form) {
+      const data = await axios.post(`${url}reset-password`, form)
+      .then((response) => {
+         return response.data
+      })
+      .catch((error) => {
+         return error.response.data
+      })
+      return data;
+   }
+
+   async function handleNewPassword(form) {
+      const data = await axios.put(`${url}reset-password`, form)
       .then((response) => {
          return response.data
       })
