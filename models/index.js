@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const connection = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.9b1df.mongodb.net/${process.env.DB_DATABASE}?retryWrites=true&w=majority`
+// const connection = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cluster0.9b1df.mongodb.net/${process.env.DB_DATABASE}?retryWrites=true&w=majority`
+const connection = process.env.MONGODB_URI;
 
 mongoose.set("debug", true)
 mongoose.Promise = global.Promise
